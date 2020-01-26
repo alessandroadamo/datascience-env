@@ -1,0 +1,5 @@
+notebooks/*
+data/minio/*
+data/postgresql/*
+data/redis/*
+data/superset/*
