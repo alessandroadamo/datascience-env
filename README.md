@@ -35,6 +35,7 @@ In the following table are listed all the services on the default ports.
 
 # Connect to PostgreSQL from Adminer
 To create a connection to postgresql docker container from Adminer service, from the page [http://localhost:8080/](http://localhost:8080/) create a new connection with the following pamaters:
+```
 | Parameter      |  Value       | 
 | -------------- |:------------:| 
 | System         | PostgresSQL  | 
@@ -42,5 +43,6 @@ To create a connection to postgresql docker container from Adminer service, from
 | Username       | postgresql   | 
 | Password       | postgresql   | 
 | Database       | postgresql   | 
+```
 
 ![alt text](https://github.com/alessandroadamo/datascience-env/blob/master/img/adminer_postgres.PNG "Adminer connection creator")
