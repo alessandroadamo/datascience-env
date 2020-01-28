@@ -38,7 +38,6 @@ To create a connection to postgresql docker container from Adminer service, from
 
 ![alt text](https://github.com/alessandroadamo/datascience-env/blob/master/img/adminer_postgres.PNG "Adminer connection creator")
 
-
 | Parameter      |  Value       | 
 | -------------- |:------------:| 
 | System         | PostgresSQL  | 
