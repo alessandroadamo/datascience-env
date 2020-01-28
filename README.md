@@ -24,7 +24,7 @@ foo@bar:~$ docker-compose up
 To access to the different tools, open a web browser and navigate to *localhost*.
 In the following table are listed all the services on the default ports.
 
-| Service        | Link           | 
+| Service        | Link                                              | 
 | -------------- |:-------------------------------------------------:| 
 | Jupyter        | [http://localhost:8888/](http://localhost:8888/)  | 
 | Superset       | [http://localhost:8088/](http://localhost:8088/)  | 
@@ -34,3 +34,13 @@ In the following table are listed all the services on the default ports.
 | Minio          | [http://localhost:9000/](http://localhost:9000/)  | 
 
 # Connect to PostgreSQL from Adminer
+To create a connection to postgresql docker container from Adminer service, from the page [http://localhost:8080/](http://localhost:8080/) create a new connection with the following pamaters:
+| Parameter      |  Value       | 
+| -------------- |:------------:| 
+| System         | PostgresSQL  | 
+| Server         | postgresql   | 
+| Username       | postgresql   | 
+| Password       | postgresql   | 
+| Database       | postgresql   | 
+
+![alt text](https://github.com/alessandroadamo/datascience-env/blob/master/img/adminer_postgres.PNG "Adminer connection creator")
