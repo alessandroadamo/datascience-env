@@ -1,4 +1,3 @@
-# Use postgres/example user/password credentials
 version: "3.7"
 
 services:
@@ -7,7 +6,7 @@ services:
         container_name: datascience-jupyter
         restart: always
         build:
-            context: ./docker/superset
+            context: ./docker/jupyter
             dockerfile: Dockerfile
         image: "jupyter"
         ports:
@@ -15,7 +14,19 @@ services:
         environment:
             - JUPYTER_ENABLE_LAB=yes
         volumes:
-            - //c/Users/Alessandro/Documents/datascience/notebooks:/home/jovyan/work 
+            - ./notebooks:/home/jovyan/work 
+
+    superset:
+        container_name: datascience-superset
+        restart: always
+        build:
+            context: ./docker/superset
+            dockerfile: Dockerfile
+        image: "superset"
+        ports:
+            - "8088:8088"
+        volumes:
+            - superset:/home/superset/.superset
 
     minio:
         container_name: datascience-minio
@@ -28,7 +39,7 @@ services:
             - MINIO_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
         command: server /data
         volumes:
-            - //c/Users/Alessandro/Documents/datascience/data/minio:/data
+            - minio:/data
 
     redis:
         container_name: datascience-redis
@@ -37,38 +48,69 @@ services:
         ports:
             - "6379:6379"
         volumes:
-            - //c/Users/Alessandro/Documents/datascience/etc/redis.conf:/usr/local/etc/redis/redis.conf
-            - //c/Users/Alessandro/Documents/datascience/data/redis:/data
+            - ./etc/redis.conf:/usr/local/etc/redis/redis.conf
+            - redis:/data
+
+    redisinsight:
+        container_name: datascience-redisinsight
+        restart: always
+        image: "redislabs/redisinsight"
+        ports:
+            - "8001:8001"
+        volumes:
+            - redisinsight:/db
+
+    adminer:
+        container_name: datascience-adminer
+        restart: always
+        image: adminer
+        ports:
+            - "8080:8080"
 
     postgres:
         container_name: datascience-postgres
         restart: always
-        image: postgres:12.1
+        build:
+            context: ./docker/postgresql
+            dockerfile: Dockerfile
+        image: "postgresql"
         ports:
             - "5432:5432"
         environment:
             - DEBUG=false
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
+            - PGDATA=/var/lib/postgresql/data
         volumes:
-            - //c/Users/Alessandro/Documents/datascience/data/postgresql:/var/lib/postgresql
- 
-    adminer:
-        container_name: datascience-adminer
-        restart: always
-        image: adminer
-        restart: always
-        ports:
-            - "8080:8080"
+            - pgdata:/var/lib/postgresql/data
 
-    superset:
-        container_name: datascience-superset
+    mongodb:
+        container_name: datascience-mongodb
         restart: always
-        build:
-            context: ./docker/superset
-            dockerfile: Dockerfile
-        image: "superset"
+        image: "mongo:4.0.15-xenial"
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=root
         ports:
-            - "8089:8088"
+            - "27017:27017"
         volumes:
-            - //c/Users/Alessandro/Documents/datascience/data/superset:/home/superset/.superset
+            - mongodb:/data/db
+
+    mongo-express:
+        container_name: datascience-mongo-express
+        image: "mongo-express:0.49.0"
+        restart: always
+        ports:
+            - "8081:8081"
+        environment:
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+            - ME_CONFIG_MONGODB_SERVER=datascience-mongodb
+
+volumes:
+  minio:
+  superset:
+  redis:
+  redisinsight:
+  pgdata:
+  mongodb:
