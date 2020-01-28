@@ -1,7 +1,6 @@
 Superset Visualization Tool
 ===========================
 
-
 Build the Image
 ---------------
 

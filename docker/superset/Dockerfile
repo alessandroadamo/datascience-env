@@ -8,6 +8,7 @@ RUN apt-get install -y build-essential libssl-dev libffi-dev python-dev python-p
 
 RUN adduser --uid $UID --disabled-password superset
 WORKDIR /home/superset
+RUN mkdir -p /home/superset/.superset && chown superset /home/superset/.superset
 
 RUN pip install --upgrade setuptools pip
 RUN pip install --upgrade gunicorn==19.8.0 apache-superset==0.35.2 psycopg2
@@ -17,10 +18,10 @@ USER superset
 #ENV PATH "/home/superset/.local/bin:${PATH}"
 ENV FLASK_APP superset:app 
 
-#RUN flask fab create-admin --username superset --firstname superset --lastname superset --email superset --password superset
-#RUN superset db upgrade
-#RUN superset init
-#RUN superset load_examples
+RUN flask fab create-admin --username superset --firstname superset --lastname superset --email superset --password superset
+RUN superset db upgrade
+RUN superset init
+# RUN superset load_examples
 
 CMD ["gunicorn", "-w", "10", "--timeout", "120", "-b", "0.0.0.0:8088", "superset:app"]
 
